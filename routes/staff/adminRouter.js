@@ -8,7 +8,7 @@ const {
   adminUnWithdrawTeacherCtrl,
   adminWithdrawTeacherCtrl,
   deleteAdminCtrl,
-  getAdminCtrl,
+  getAdminProfileCtrl,
   getAdminsCtrl,
   loginAdminCtrl,
   updateAdminCtrl,
@@ -28,7 +28,7 @@ adminRouter.get("/", getAdminsCtrl);
 
 //single
 
-adminRouter.get("/:id",isLogin, getAdminCtrl);
+adminRouter.get("/profile",isLogin, getAdminProfileCtrl);
 
 //update
 adminRouter.put("/:id", deleteAdminCtrl);

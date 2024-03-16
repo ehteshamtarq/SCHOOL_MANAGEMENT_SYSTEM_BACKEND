@@ -1,4 +1,4 @@
-const brcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const adminSchema = new mongoose.Schema(
   {
@@ -18,19 +18,51 @@ const adminSchema = new mongoose.Schema(
       type: String,
       default: "admin",
     },
+    academicTerms: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "AcademicTerm",
+      }
+    ],
+    academicYears: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "AcademicYear",
+      }
+    ],
+    classLevels: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "ClassLevel",
+      }
+    ],
+    teachers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Teacher",
+      }
+    ],
+    students: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Student",
+      }
+    ],
+
+
   },
   {
-    typeStamps: true,
+    timestamps: true,
   }
 );
 
 //Hash Password
-adminSchema.pre("Save", async function (next) {
+adminSchema.pre('save', async function (next) {
   if (!this.isModified("password")) {
     next(); // if user is not updating password but updating other fields then password will be hashed again. To avoid that we use this.
   }
   //salt
-  const salt = await brcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
   console.log("I have been called");
   next();

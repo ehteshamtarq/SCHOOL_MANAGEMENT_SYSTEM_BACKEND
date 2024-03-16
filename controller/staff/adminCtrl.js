@@ -20,7 +20,8 @@ exports.registerAdmCtrl = AsyncHandler(async (req, res) => {
   });
   res.status(201).json({
     status: "success",
-    data: "Admin has been registered",
+    data: user,
+    message: "Admin Registered Successfully",
   });
 });
 
@@ -36,10 +37,10 @@ exports.loginAdminCtrl = AsyncHandler(async (req, res) => {
   }
 
   if (user && (await user.verifyPassword(password))) {
-    const token = generateToken(user._id);
-    const verify = verifyToken(token);
-    console.log(verify);
-    return res.json({ data: generateToken(user._id), user, verify });
+    return res.json({
+      data: generateToken(user._id),
+      message: "Admin logged in successfully",
+    });
   } else {
     return res.json({ message: "Invalid login credentials" });
   }
@@ -66,19 +67,22 @@ exports.getAdminsCtrl = (req, res) => {
 //@route    GET /api/v1/admins/:id
 //@access   Private
 
-exports.getAdminCtrl = (req, res) => {
-  try {
-    res.status(201).json({
+exports.getAdminProfileCtrl = AsyncHandler(async (req, res) => {
+  console.log("login complete");
+  const admin = await Admin.findById(req.userAuth._id).select(
+    "-password -createdAt -updatedAt"
+  );
+
+  if (!admin) {
+    throw new Error("Admin not Found");
+  } else {
+    res.status(200).json({
       status: "success",
-      data: "single admin",
-    });
-  } catch (error) {
-    res.json({
-      status: "failed",
-      error: error.message,
+      data: admin,
+      message: "Admin Profile fetched successfully",
     });
   }
-};
+});
 //@desc    update admin
 //@route    UPDATE /api/v1/admins/:id
 //@access   Private
