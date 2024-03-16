@@ -3,7 +3,7 @@ const Admin = require('../model/Staff/Admin');
 const isLogin = async(req, res, next) => {
   // get token from header
   const headerObj = req.headers;
-  const token = headerObj.authorization.split(" ")[1];
+  const token = headerObj?.authorization?.split(" ")[1];
   const verifiedToken = verifyToken(token);
   console.log(verifiedToken);
   if (verifiedToken) {
