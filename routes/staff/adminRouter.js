@@ -31,10 +31,10 @@ adminRouter.get("/", isLogin, getAdminsCtrl);
 adminRouter.get("/profile",isLogin,isAdmin, getAdminProfileCtrl);
 
 //update
-adminRouter.put("/:id", deleteAdminCtrl);
+adminRouter.put("/", isLogin, isAdmin, updateAdminCtrl);
 
 //delete
-adminRouter.delete("/:id", updateAdminCtrl);
+adminRouter.delete("/:id", deleteAdminCtrl);
 
 //suspend
 adminRouter.put("/suspend/teacher/:id", adminSuspendTeacherCtrl);

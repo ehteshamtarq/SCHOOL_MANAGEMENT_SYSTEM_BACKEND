@@ -1,22 +1,27 @@
 const AsyncHandler = require("express-async-handler");
 const Admin = require("../../model/Staff/Admin");
 const generateToken = require("../../utils/generateToken");
-const verifyToken = require("../../utils/verifyToken");
+const bcrypt = require("bcryptjs");
+const { hashPassword, isPassMatched } = require("../../utils/helper");
 
 //@desc Register admin
 //@route POST /api/admins/register
 //@acess  Private
 exports.registerAdmCtrl = AsyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
+  console.log(name, email, password);
 
   const adminFound = await Admin.findOne({ email });
+  console.log;
   if (adminFound) {
     res.json("Admin Exists");
   }
+
+  //register
   const user = await Admin.create({
     name,
     email,
-    password,
+    password: await hashPassword(password),
   });
   res.status(201).json({
     status: "success",
@@ -35,14 +40,15 @@ exports.loginAdminCtrl = AsyncHandler(async (req, res) => {
   if (!user) {
     return res.json({ message: "Invalid login credentials" });
   }
-
-  if (user && (await user.verifyPassword(password))) {
+  //verify password
+  const isMatched = await isPassMatched(password, user.password);
+  if (!isMatched) {
+    return res.json({ message: "Invalid login credentials" });
+  } else {
     return res.json({
       data: generateToken(user._id),
       message: "Admin logged in successfully",
     });
-  } else {
-    return res.json({ message: "Invalid login credentials" });
   }
 });
 
@@ -50,14 +56,14 @@ exports.loginAdminCtrl = AsyncHandler(async (req, res) => {
 //@route    GET /api/v1/admins
 //@access   Private
 
-exports.getAdminsCtrl = AsyncHandler(async(req, res) => {
+exports.getAdminsCtrl = AsyncHandler(async (req, res) => {
   const admins = await Admin.find();
   res.status(200).json({
-    status:"success",
+    status: "success",
     message: "Admin fetched successfully",
     data: admins,
-  })
-})
+  });
+});
 //@desc     Get single admin
 //@route    GET /api/v1/admins/:id
 //@access   Private
@@ -81,19 +87,51 @@ exports.getAdminProfileCtrl = AsyncHandler(async (req, res) => {
 //@desc    update admin
 //@route    UPDATE /api/v1/admins/:id
 //@access   Private
-exports.updateAdminCtrl = (req, res) => {
-  try {
-    res.status(201).json({
+exports.updateAdminCtrl = AsyncHandler(async (req, res) => {
+  const { email, name, password } = req.body;
+  const emailExist = await Admin.findOne({ email });
+
+  if (emailExist) {
+    throw new Error("This is taken/exist");
+  }
+
+  if (password) {
+    const admin = await Admin.findByIdAndUpdate(
+      req.userAuth._id,
+      {
+        email,
+        password: await hashPassword(password),
+        name,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(200).json({
       status: "success",
-      data: "update admin",
+      data: admin,
+      message: "Admin updated successfully",
     });
-  } catch (error) {
-    res.json({
-      status: "failed",
-      error: error.message,
+  } else {
+    const admin = await Admin.findByIdAndUpdate(
+      req.userAuth._id,
+      {
+        email,
+        name,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    res.status(200).json({
+      status: "success",
+      data: admin,
+      message: "Admin updated successfully",
     });
   }
-};
+});
 
 //@desc     Delete admin
 //@route    DELETE /api/v1/admins/:id
