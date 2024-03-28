@@ -8,9 +8,10 @@ const classLevelRouter = require("../routes/academics/classLevelRouter");
 const programRouter = require("../routes/academics/programRouter");
 const subjectRouter = require("../routes/academics/subjectRouter");
 const yearGroupRouter = require("../routes/academics/yearGroupRouter");
-const teacherRouter = require("../routes/academics/teacherRouter");
+const teacherRouter = require("../routes/staff/teacherRouter");
 const examsRouter = require("../routes/academics/examsRouter");
-const studentRouter = require("../routes/academics/studentRouter");
+const studentRouter = require("../routes/staff/studentRouter");
+const questionsRouter = require("../routes/academics/questionsRouter");
 
 const app = express();
 
@@ -27,6 +28,8 @@ app.use("/api/v1/subjects", subjectRouter);
 app.use("/api/v1/year-groups", yearGroupRouter);
 app.use("/api/v1/teachers", teacherRouter);
 app.use("/api/v1/exams", examsRouter);
+app.use("/api/v1/students", studentRouter);
+app.use("/api/v1/questions", questionsRouter);
 
 app.use(notFoundErr); 
 app.use(globalErrHandler);
