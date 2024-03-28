@@ -2,7 +2,7 @@ const AsyncHandler = require("express-async-handler");
 const AcademicYear = require("../../model/Academic/AcademicYear");
 const Admin = require("../../model/Staff/Admin");
 
-//@desc     Create Academic admins
+//@desc     Create Academic Year
 //@route    POST /api/v1/academic-years
 //@access   Private
 exports.createAcademicYear = AsyncHandler(async (req, res) => {

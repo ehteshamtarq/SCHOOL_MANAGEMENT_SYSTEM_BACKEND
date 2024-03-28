@@ -9,20 +9,20 @@ const {
 const isAdmin = require("../../middlewares/isAdmin");
 const isLogin = require("../../middlewares/isLogin");
 
-const academicYearRouter  = express.Router();
+const academicTermRouter  = express.Router();
 
-academicYearRouter.post("/", isLogin, isAdmin, createAcademicYear);
+academicTermRouter.post("/", isLogin, isAdmin, createAcademicYear);
 
-academicYearRouter.get("/", isLogin, isAdmin, getAcademicYears);
+academicTermRouter.get("/", isLogin, isAdmin, getAcademicYears);
 
-academicYearRouter.get("/:id", isLogin, isAdmin, getAcademicYear);
+academicTermRouter.get("/:id", isLogin, isAdmin, getAcademicYear);
 
-academicYearRouter.put("/:id", isLogin, isAdmin, updateAcademicYear);
+academicTermRouter.put("/:id", isLogin, isAdmin, updateAcademicYear);
 
-academicYearRouter.delete("/:id", isLogin, isAdmin, deleteAcademicYear);
-
-
+academicTermRouter.delete("/:id", isLogin, isAdmin, deleteAcademicYear);
 
 
 
-module.exports = academicYearRouter;
+
+
+module.exports = academicTermRouter;
