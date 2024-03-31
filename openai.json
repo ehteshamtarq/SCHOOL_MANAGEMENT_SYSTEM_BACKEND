@@ -5,7 +5,11 @@
     "description": "This is a school management server. The users for this applications are teacher, admin and student. Before teacher or student can use the application, the admin must register them in the server."
   },
   "servers": [
+   
     {
+      "url": "https://school-management-system-api.onrender.com/"
+    },
+     {
       "url": "http://localhost:5000/api/v1"
     }
   ],
