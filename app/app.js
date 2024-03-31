@@ -1,5 +1,12 @@
 const express = require("express");
-const {globalErrHandler,notFoundErr} = require('../middlewares/globalErrHandler')
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
+const openaijson = require("../openai.json");
+
+const {
+  globalErrHandler,
+  notFoundErr,
+} = require("../middlewares/globalErrHandler");
 const morgan = require("morgan");
 const adminRouter = require("../routes/staff/adminRouter");
 const academicYearRouter = require("../routes/academics/academicYearRouter");
@@ -18,6 +25,20 @@ const app = express();
 //Middlewares
 app.use(morgan("dev"));
 app.use(express.json()); // pass incoming jsons
+
+const options = {
+  definition: openaijson,
+   apis: [
+    '../routes/academics/*.js', 
+    '../routes/staff/*.js'
+  ]
+};
+
+const specs = swaggerJsDoc(options);
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+
+
 //Routes
 app.use("/api/v1/admins", adminRouter);
 app.use("/api/v1/academic-years", academicYearRouter);
@@ -31,7 +52,8 @@ app.use("/api/v1/exams", examsRouter);
 app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/questions", questionsRouter);
 
-app.use(notFoundErr); 
+app.use(notFoundErr);
 app.use(globalErrHandler);
 
+// Serve Swagger UI
 module.exports = app;

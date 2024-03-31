@@ -13,9 +13,6 @@ const isLogin = require("../../middlewares/isLogin");
 const isTeacher = require("../../middlewares/isTeacher");
 const isTeacherLogin = require("../../middlewares/isTeacherLogin");
 
-
-i
-
 const teachersRouter = express.Router();
 
 teachersRouter.post("/admin/register", isLogin, isAdmin, adminRegisterTeacher);

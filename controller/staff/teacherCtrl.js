@@ -1,6 +1,6 @@
 const AsyncHandler = require("express-async-handler");
 const Teacher = require("../../model/Staff/Teacher");
-const { hashPassword, isPassMatched } = require("../../utils/helpers");
+const { hashPassword, isPassMatched } = require("../../utils/helper");
 //@desc  Admin Register Teacher
 //@route POST /api/teachers/admin/register
 //@acess  Private
@@ -125,7 +125,7 @@ exports.getTeacherProfile = AsyncHandler(async (req, res) => {
 //@route    UPDATE /api/v1/teachers/:teacherID/update
 //@access   Private Teacher only
 
-exports.teacherUpdateProfile = AysncHandler(async (req, res) => {
+exports.teacherUpdateProfile = AsyncHandler(async (req, res) => {
   const { email, name, password } = req.body;
   //if email is taken
   const emailExist = await Teacher.findOne({ email });
@@ -180,7 +180,7 @@ exports.teacherUpdateProfile = AysncHandler(async (req, res) => {
 //@route    UPDATE /api/v1/teachers/:teacherID/admin
 //@access   Private Admin only
 
-exports.adminUpdateTeacher = AysncHandler(async (req, res) => {
+exports.adminUpdateTeacher = AsyncHandler(async (req, res) => {
   const { program, classLevel, academicYear, subject } = req.body;
   //if email is taken
   const teacherFound = await Teacher.findById(req.params.teacherID);

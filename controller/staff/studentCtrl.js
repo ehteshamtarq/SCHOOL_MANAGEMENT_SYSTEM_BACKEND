@@ -3,7 +3,7 @@ const Exam = require("../../model/Academic/Exam");
 const ExamResult = require("../../model/Academic/ExamResults");
 const Student = require("../../model/Academic/Student");
 const generateToken = require("../../utils/generateToken");
-const { hashPassword, isPassMatched } = require("../../utils/helpers");
+const { hashPassword, isPassMatched } = require("../../utils/helper");
 
 //@desc  Admin Register Student
 //@route POST /api/students/admin/register
