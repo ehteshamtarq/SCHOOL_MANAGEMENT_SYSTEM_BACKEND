@@ -43,7 +43,6 @@ const examResultSchema = new Schema(
     },
     position: {
       type: Number,
-      required: true,
     },
 
     classLevel: {

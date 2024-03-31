@@ -19,6 +19,7 @@ const teacherRouter = require("../routes/staff/teacherRouter");
 const examsRouter = require("../routes/academics/examsRouter");
 const studentRouter = require("../routes/staff/studentRouter");
 const questionsRouter = require("../routes/academics/questionsRouter");
+const examResultsRouter = require("../routes/academics/examResultsRouter");
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use("/api/v1/teachers", teacherRouter);
 app.use("/api/v1/exams", examsRouter);
 app.use("/api/v1/students", studentRouter);
 app.use("/api/v1/questions", questionsRouter);
+app.use("/api/v1/exam-results", examResultsRouter);
 
 app.use(notFoundErr);
 app.use(globalErrHandler);

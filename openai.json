@@ -53,6 +53,10 @@
     {
       "name": "questions",
       "description": "create, get, update, delete questions"
+    },
+     {
+      "name": "exam-results",
+      "description": "Admin publish/unpublish result. Students can see the results"
     }
   ],
   "paths": {
@@ -1809,7 +1813,99 @@
           "required": true
         }
       }
+    },
+    "/exam-results": {
+      "get": {
+        "tags": [
+          "exam-results"
+        ],
+        "summary": "Student get all the published results",
+        "parameters": [
+          {
+            "name": "authorization",
+            "description": "student login token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/exam-results/{exam ID}/checking": {
+      "get": {
+        "tags": [
+          "exam-results"
+        ],
+        "summary": "Student can see the result based on exam ID",
+        "parameters": [
+          {
+            "name": "authorization",
+            "description": "student login token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "exam ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/exam-results/{exam ID}/admin-publish": {
+      "put": {
+        "tags": [
+          "exam-results"
+        ],
+        "summary": "Admin publish/unpublish results",
+        "parameters": [
+          {
+            "name": "authorization",
+            "description": "admin login token",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "exam ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+         "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "isPublished": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "isPublished"
+                ]
+              }
+            }
+          },
+          "required": true
+        }
+      }
     }
+
   },
   "components": {
     "schemas": {
@@ -2092,6 +2188,31 @@
           },
           "isCorrect": {
             "type": "string"
+          }
+        }
+      },
+        "examResults": {
+        "required": [
+          "studentID",
+          "exam",
+          "grade",
+          "score"
+
+        ],
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string"
+          },
+          "exam": {
+           "type": "array",
+            "$ref": "#/components/schemas/exams"
+          },
+          "grade": {
+            "type": "integer"
+          },
+          "score": {
+            "type": "integer"
           }
         }
       }

@@ -2,6 +2,7 @@ const AysncHandler = require("express-async-handler");
 const Exam = require("../../model/Academic/Exam");
 const ExamResult = require("../../model/Academic/ExamResults");
 const Student = require("../../model/Academic/Student");
+const Admin = require("../../model/Staff/Admin");
 const generateToken = require("../../utils/generateToken");
 const { hashPassword, isPassMatched } = require("../../utils/helper");
 
@@ -11,6 +12,13 @@ const { hashPassword, isPassMatched } = require("../../utils/helper");
 
 exports.adminRegisterStudent = AysncHandler(async (req, res) => {
   const { name, email, password } = req.body;
+  
+  //find the admin
+  const adminFound = await Admin.findById(req.userAuth?.id);
+  if (!adminFound){
+    throw new Error("Admin not found ")
+  }
+
   //check if teacher already exists
   const student = await Student.findOne({ email });
   if (student) {
@@ -24,6 +32,8 @@ exports.adminRegisterStudent = AysncHandler(async (req, res) => {
     email,
     password: hashedPassword,
   });
+   adminFound.students.push(studentRegistered?._id);
+  await adminFound.save();
   //send student data
   res.status(201).json({
     status: "success",
@@ -63,13 +73,35 @@ exports.loginStudent = AysncHandler(async (req, res) => {
 exports.getStudentProfile = AysncHandler(async (req, res) => {
   const student = await Student.findById(req.userAuth?._id).select(
     "-password -createdAt -updatedAt"
-  );
+  ).populate('examResults');
   if (!student) {
     throw new Error("Student not found");
   }
+
+  const studentProfile = {
+    name : student?.name,
+    email: student?.email,
+    currentClassLevel: student?.currentClassLevel,
+    program: student?.program,
+    dateAdmitted: student?.dateAdmitted,
+    isSuspended: student?.isSuspended,
+    isWithdrawn: student?.isWithdrawn,
+    studentId: student?.studentId,
+    prefectName: student?.perfectName
+  }
+
+  const examResults = student?.examResults;
+  const currentExamResult = examResults[examResults.length - 1];
+
+  const isPublished = currentExamResult?.isPublished;
+
+  const currentResult = ExamResult
   res.status(200).json({
     status: "success",
-    data: student,
+    data: {
+      studentProfile,
+      currentExamResult: isPublished ? currentExamResult : []
+    },
     message: "Student Profile fetched  successfully",
   });
 });
@@ -305,7 +337,7 @@ exports.writeExam = AysncHandler(async (req, res) => {
 
   //Generate Exam results
   const examResults = await ExamResult.create({
-    student: studentFound?._id,
+    studentID: studentFound?.studentId,
     exam: examFound?._id,
     grade,
     score,
