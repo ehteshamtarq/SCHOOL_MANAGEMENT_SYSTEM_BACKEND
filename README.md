@@ -43,7 +43,7 @@ npm start
 
 6. Access the application in your web browser at [http://localhost:5000](http://localhost:5000).
 
-7. You can access Swagger UI docs at [http://localhost:5000/api-docs]
+7. You can access Swagger UI docs at [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
 
 ## Deployment
 [Live](https://school-management-system-api.onrender.com/api-docs/)
