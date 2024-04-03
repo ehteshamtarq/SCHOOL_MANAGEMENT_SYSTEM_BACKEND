@@ -1,5 +1,5 @@
 # school-management-system-api
-This is a school management server. The users for this applications are teacher, admin and student. Before teacher or student can use the application, the admin must register students and teachers in the server. Admin can create, update and delete students, teachers, academic year, academic terms, programs, subjects, class levels. Teachers can create exams and questions for that exam. Student can give exams. Admin can publish/unpublish results
+This server functions as a school management system, catering to users such as teachers, administrators, and students. Prior to accessing the application, administrators must first register teachers and students within the server. Administrators possess the capability to create, modify, and remove student and teacher profiles, along with managing academic year details, academic terms, programs, subjects, and class levels. Teachers are empowered to generate exams and compose questions for these exams, while students are able to participate in exams. Additionally, administrators hold the authority to publish or unpublish exam results.
 
 ## Functionalities
 
